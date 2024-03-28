@@ -1,10 +1,9 @@
 const express = require("express");
-
 const app = express();
 app.use(express.json());
-const menusController = require("../controllers/menusController");
-
 const router = express.Router();
+
+const menusController = require("../controllers/menusController");
 
 router.route("/").get(menusController.getAllMenus);
 router.route("/:id").get(menusController.patchMenuById);
