@@ -34,17 +34,33 @@ exports.newFavItem = async (req, res) => {
 
 // GET
 exports.getAllFavItems = async (req, res) => {
-  const { username } = req.params;
+  const { paramsUsername } = req.params;
+  const { loggedInUsername } = req.body;
   console.log(username);
   try {
-    const allFavItems = await UserFav.findOne({ userName: username });
+    const findUser = await UserFav.findOne({ userName: paramsUsername });
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        allFavItems,
-      },
-    });
+    // if user can't find in the database
+    if (!findUser) {
+      const newUser = new UserFav({
+        username: loggedInUsername,
+        favoriteList: [],
+      });
+      await newUser.save();
+
+      res.status(201).json({
+        status: "new user has been created in database!",
+      });
+    }
+    // if user can find in the database
+    if (findUser) {
+      res.status(200).json({
+        status: "success",
+        data: {
+          allFavItems,
+        },
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: "failed",

@@ -4,6 +4,7 @@ const userFavSchema = new mongoose.Schema(
   {
     userName: {
       type: String,
+      unique: true,
     },
     favoriteList: {
       type: Array,
