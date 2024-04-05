@@ -8,13 +8,9 @@ app.use(express.json());
 app.use(cors());
 const menusRouter = require("./routers/menusRouter");
 const userFavRouter = require("./routers/userFavRouter");
-mongoose
-  .connect(
-    "mongodb+srv://mahyarnafisi:OA3QMx0Tz0o3MOXh@cluster0.xuzng70.mongodb.net/allmenu?retryWrites=true&w=majority"
-  )
-  .then((con) => {
-    console.log("DB connection successful", con.connection._connectionString);
-  });
+mongoose.connect("mongodb+srv://mahyarnafisi:OA3QMx0Tz0o3MOXh@cluster0.xuzng70.mongodb.net/allmenu?retryWrites=true&w=majority").then((con) => {
+  console.log("DB connection successful", con.connection._connectionString);
+});
 
 app.use("/api/v1/menus", menusRouter);
 app.use("/api/v1/usersfavs", userFavRouter);
