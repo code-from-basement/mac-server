@@ -1,28 +1,27 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-const UserFav = require("../models/usersFav");
+const User = require("../models/usersFav");
 
 // POST
 exports.newFavItem = async (req, res) => {
   const { username, favoriteList } = req.body;
 
-  const allUsername = await UserFav.find();
-  const findUsername = await UserFav.findOne({ username: username });
+  const allUsername = await User.find();
+  const findUsername = await User.findOne({ username: username });
+  console.log(username, favoriteList, findUsername);
   try {
+    const newUserFav = new User({
+      username,
+      favoriteList,
+    });
     if (!findUsername) {
-      const newUserFav = new UserFav({
-        username,
-        favoriteList,
-      });
-
       await newUserFav.save();
-
       res.status(201).json({
         status: "new user has been created in database!",
+        data: { username: newUserFav.username, favoriteList: newUserFav.favoriteList },
       });
-    }
-    if (findUsername) {
+    } else {
       res.status(200).json({
         status: "success",
         data: { username: findUsername.username, favoriteList: findUsername.favoriteList },
@@ -36,21 +35,15 @@ exports.newFavItem = async (req, res) => {
       // });
     }
   } catch (err) {
-    res.status(404).json({ status: "failed", message: err.message });
+    res.status(403).json({ status: "failedx", message: err.message });
   }
 };
 
 // GET
 exports.getAllFavItems = async (req, res) => {
-  const { paramsUsername } = req.params;
-  const { username } = req.body;
   console.log(username);
   try {
-    const findUser = await UserFav.findOne({ username: username });
-
     // if user can't find in the database
-    if (!findUser) {
-    }
     // if user can find in the database
   } catch (err) {
     res.status(404).json({

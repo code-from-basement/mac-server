@@ -4,7 +4,7 @@ const userFavSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      unique: true,
+      required: true,
     },
     favoriteList: {
       type: Array,
@@ -15,5 +15,5 @@ const userFavSchema = new mongoose.Schema(
   }
 );
 
-const UserFav = mongoose.model("usersfavs", userFavSchema);
-module.exports = UserFav;
+const User = mongoose.model("User", userFavSchema);
+module.exports = User;
